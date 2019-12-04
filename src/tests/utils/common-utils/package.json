@@ -1,0 +1,30 @@
+{
+  "name": "@zapjs/eos-utils",
+  "private": false,
+  "version": "1.0.0",
+  "description": "utils for eos sdk",
+  "repository": "https://github.com/smartum-ks/eos-sdk.git",
+  "main": "./out/index.js",
+  "types": "./out/types.d.ts",
+  "typings": "./out",
+  "scripts": {
+    "build": "tsc --module commonjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "eos",
+    "sdk",
+    "zap"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eosjs": "20.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^10.10.0",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.2"
+  }
+}

@@ -1,0 +1,167 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "Proposal",
+            "base": "",
+            "fields": [
+                {
+                    "name": "key",
+                    "type": "uint64"
+                },
+                {
+                    "name": "proposer",
+                    "type": "name"
+                },
+                {
+                    "name": "proposal_name",
+                    "type": "name"
+                },
+                {
+                    "name": "timestamp",
+                    "type": "time_point"
+                }
+            ]
+        },
+        {
+            "name": "Transaction",
+            "base": "",
+            "fields": [
+                {
+                    "name": "key",
+                    "type": "uint64"
+                },
+                {
+                    "name": "transaction_hash",
+                    "type": "checksum256"
+                }
+            ]
+        },
+        {
+            "name": "addproposal",
+            "base": "",
+            "fields": [
+                {
+                    "name": "transaction_hash",
+                    "type": "checksum256"
+                },
+                {
+                    "name": "proposer",
+                    "type": "name"
+                },
+                {
+                    "name": "proposal_name",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "droptables",
+            "base": "",
+            "fields": []
+        },
+        {
+            "name": "rmoldpropos",
+            "base": "",
+            "fields": [
+                {
+                    "name": "proposer",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "rmproposal",
+            "base": "",
+            "fields": [
+                {
+                    "name": "key",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "transfer",
+            "base": "",
+            "fields": [
+                {
+                    "name": "transaction_hash",
+                    "type": "checksum256"
+                },
+                {
+                    "name": "proposal_name",
+                    "type": "name"
+                },
+                {
+                    "name": "block_num",
+                    "type": "uint32"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                },
+                {
+                    "name": "amount",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "version",
+            "base": "",
+            "fields": []
+        }
+    ],
+    "actions": [
+        {
+            "name": "addproposal",
+            "type": "addproposal",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "droptables",
+            "type": "droptables",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "rmoldpropos",
+            "type": "rmoldpropos",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "rmproposal",
+            "type": "rmproposal",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "transfer",
+            "type": "transfer",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "version",
+            "type": "version",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "proposals",
+            "type": "Proposal",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "transactions",
+            "type": "Transaction",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}

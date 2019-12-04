@@ -1,0 +1,52 @@
+{
+  "name": "bridge",
+  "version": "0.1.0",
+  "scripts": {
+    "clean": "rimraf out/*",
+    "copy-assets": "ts-node tools/copyAssets",
+    "lint": "tslint -c tslint.json -p tsconfig.json --fix",
+    "tsc": "tsc",
+    "build": "./node_modules/typescript/bin/tsc",
+    "dev:start_oracle": "npm-run-all build start_oracle",
+    "dev:start_executer": "npm-run-all build start_executer",
+    "dev": "nodemon --watch src -e ts --exec npm run dev:start",
+    "start_oracle": "node ./build/oracle.js",
+    "prod": "./node_modules/webpack/bin/webpack.js",
+    "test": "./node_modules/mocha/bin/mocha $PKG -r ts-node/register src/tests/test.ts --timeout 1000000"
+  },
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^1.0.20",
+    "big-number": "2.0.0",
+    "bindings": "^1.5.0",
+    "eosjs": "20.0.0",
+    "eosjs-ecc": "4.0.4",
+    "node-fetch": "2.6.0",
+    "node-gyp": "^6.0.0",
+    "node-persist": "3.0.5",
+    "node-pre-gyp": "^0.13.0",
+    "node-typescript": "^0.1.3",
+    "truffle-hdwallet-provider-privkey": "^0.3.0",
+    "ts-loader": "^6.2.0",
+    "web3": "1.2.1",
+    "winston": "3.2.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.5",
+    "@types/express": "^4.16.0",
+    "@types/mocha": "5.2.7",
+    "@types/node": "^10.10.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "7.1.1",
+    "chai-bignumber": "2.0.2",
+    "mocha": "^5.2.0",
+    "nodemon": "1.18.9",
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.10.0",
+    "typescript": "3.6.3",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9",
+    "@types/web3": "1.0.20",
+    "copy-webpack-plugin": "5.0.4"
+  }
+}

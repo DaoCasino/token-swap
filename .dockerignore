@@ -1,0 +1,8 @@
+.git
+node_modules
+build
+Dockerfile
+.DS_Store
+.gitignore
+README.md
+eosio.bridge
