@@ -64,7 +64,7 @@ ACTION tokenbridge::addproposal(const checksum256 &transaction_hash, const name 
 
 ACTION tokenbridge::transfer(const checksum256 &transaction_hash, const name &proposal_name, const name &to, const asset &amount)
 {
-	require_auth(name("eosio.prods@minor"));
+	require_auth(get_self());
 
 	save_transaction_info(transaction_hash); // add transact to list, fail if already exist.
 

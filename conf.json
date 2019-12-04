@@ -1,7 +1,7 @@
 {
     "multiSig": "eosio.msig",
-    "accountName": "<YOUR_ACCOUNT_NAME>",
-    "KeyProvider": ["<YOUR_PRIVATE_KEY>"],
+    "accountName": "testtesttest",
+    "KeyProvider": ["5Jga878DkRU1NRB7tfAYoS5gxu6isxHq7UUe2e1eCdscTtyeNQM"],
     "permission": "active",
     "Net": "https://api.daovalidator.com",
     "ChainId": "74d023a9293d9b68c3c52e2f738ee681c1671cc3dc0f263cf2c533cd5523ff95",
