@@ -28,7 +28,7 @@ ACTION tokenbridge::droptables()
 
 ACTION tokenbridge::addproposal(const checksum256 &transaction_hash, const name &proposer, const name &proposal_name)
 {
-	require_auth(get_self());
+	require_auth(proposer);
 	check_is_active_producer(proposer);
 
 	auto proposers_index = this->proposals.get_index<proposer_key_n>();

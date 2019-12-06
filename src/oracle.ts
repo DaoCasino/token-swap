@@ -29,7 +29,7 @@ export class Oracle {
   public timeOffset: number = 0;
   private attemptsToApprove: number;
   private clockApi: string;
-  private blocksBehind: number;
+  private blocksBehind: number = 0;
   private latestBlock: number = 0;
   private finishBlock: number = 0;
   constructor(
