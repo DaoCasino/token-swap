@@ -78,7 +78,7 @@ export class Oracle {
   }
 
   public async getRequested(): Promise<AccountPermission[]> {
-    const { permissions }: { permissions: Permission[] } = await this.eosRpc.get_account(this.multiSig);
+    const { permissions }: { permissions: Permission[] } = await this.eosRpc.get_account('eosio.prods');
     const required_auth = permissions.filter(({ perm_name }: { perm_name: string }) => perm_name === this.permission)[0].required_auth;
     this.threshold = required_auth.threshold;
     return required_auth.accounts.map((acc: Account): AccountPermission => acc.permission);
