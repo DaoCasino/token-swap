@@ -1,9 +1,9 @@
-import {approve} from '../shared/preparedTransaction'
-import {getOneApproval, getOneProposal} from '../shared/eosTablesQuery';
-import {getUnpackedTransaction, formatString} from '../shared/utils';
-import {CustomProposals, ApprovalItem, ApprovalWithCustomProposalInfo, ValidationInfo, ValidationInfoWithEthEvent} from '../types';
-import {Oracle} from '../oracle';
-import {DELIMITER} from '../shared/constants';
+import { approve } from '../shared/preparedTransaction'
+import { getOneApproval, getOneProposal } from '../shared/eosTablesQuery';
+import { getUnpackedTransaction, formatString } from '../shared/utils';
+import { CustomProposals, ApprovalItem, ApprovalWithCustomProposalInfo, ValidationInfo, ValidationInfoWithEthEvent } from '../types';
+import { Oracle } from '../oracle';
+import { DELIMITER } from '../shared/constants';
 import { EventLog } from 'web3/types';
 const ecc = require('eosjs-ecc')
 
@@ -15,7 +15,7 @@ const ecc = require('eosjs-ecc')
  */
 export async function doApproves(self: Oracle, proposed: CustomProposals[], approvalsWithProposalInfo: ApprovalWithCustomProposalInfo[]): Promise<string[]> {
   const toValidate: ValidationInfo[] = await getProposalsToApprove(approvalsWithProposalInfo, self);
-  if(!toValidate.length) {
+  if (!toValidate.length) {
     return !proposed.length ? [] : [...Array(proposed.length).keys()].map(() => 'Unapproved: absent in eosio.msig or does not fit custom proposal table');
   }
   return validate(toValidate, self);
@@ -30,26 +30,26 @@ async function validate(toValidate: ValidationInfo[], self: Oracle) {
   try {
     const toCheckProposes = toValidate.map((proposal: any) => {
       const ethValues = self.ethEvents.filter((event: any) => formatString(event.transactionHash) === formatString(`0x${proposal.transactionHash}`));
-      return {...proposal, ethValues};
+      return { ...proposal, ethValues };
     });
 
-    const checkedPromises = toCheckProposes.map(async(validationInfoWithEthEvent: ValidationInfoWithEthEvent) => {
+    const checkedPromises = toCheckProposes.map(async (validationInfoWithEthEvent: ValidationInfoWithEthEvent) => {
       if (!validationInfoWithEthEvent.ethValues.length) {
         return `Unapproved by transactionHash: ${validationInfoWithEthEvent.proposer} - ${validationInfoWithEthEvent.proposal_name}
          ${validationInfoWithEthEvent.transactionHash}`;
       }
-      
-      const {amount: inEthAmount, accountName: inEthName} = validationInfoWithEthEvent.ethValues[0].returnValues;
-      const {to, amount} = validationInfoWithEthEvent.proposal.actions[0].data;
-      const {proposal_hash} = validationInfoWithEthEvent;
+
+      const { amount: inEthAmount, accountName: inEthName } = validationInfoWithEthEvent.ethValues[0].returnValues;
+      const { to, amount } = validationInfoWithEthEvent.proposal.actions[0].data;
+      const { proposal_hash } = validationInfoWithEthEvent;
       const ethValue = (parseFloat(inEthAmount) / DELIMITER).toFixed(4);
       const eosValue = parseFloat(amount).toFixed(4);
       const isValidated = (to === inEthName && ethValue === eosValue);
-      return isValidated ?  wrappedApprove (validationInfoWithEthEvent, self, eosValue, to, proposal_hash)
-      : `Unapproved: ${validationInfoWithEthEvent.proposer}-${validationInfoWithEthEvent.proposal_name}: ${eosValue} to ${to} when event is ${JSON.stringify(validationInfoWithEthEvent.ethValues[0].returnValues)} to ${inEthName} in ${validationInfoWithEthEvent.transactionHash}`
+      return isValidated ? wrappedApprove(validationInfoWithEthEvent, self, eosValue, to, proposal_hash)
+        : `Unapproved: ${validationInfoWithEthEvent.proposer}-${validationInfoWithEthEvent.proposal_name}: ${eosValue} to ${to} when event is ${JSON.stringify(validationInfoWithEthEvent.ethValues[0].returnValues)} to ${inEthName} in ${validationInfoWithEthEvent.transactionHash}`
     });
     return Promise.all(checkedPromises);
-  } catch (err) {self.logger.info(JSON.stringify(err)); return Promise.resolve([])};
+  } catch (err) { self.logger.info(JSON.stringify(err)); return Promise.resolve([]) };
 }
 
 /**
@@ -61,14 +61,14 @@ async function validate(toValidate: ValidationInfo[], self: Oracle) {
  * формату ассета ({float fixed до 4 знаков} BET).
  */
 async function getProposalsToApprove(wrappedApprovals: ApprovalWithCustomProposalInfo[], self: Oracle): Promise<ValidationInfo[]> {
-  const wrappedRequestedApprovals = wrappedApprovals.filter(({approval}) => {
+  const wrappedRequestedApprovals = wrappedApprovals.filter(({ approval }) => {
     return approval && !!approval.requested_approvals.filter((requestedApproval: ApprovalItem) => {
       return requestedApproval.level.actor === self.accountName;
     }
     ).length;
   });
-  const proposalsToApprove = await wrappedRequestedApprovals.reduce(async(acc: Promise<ValidationInfo[]>, requested: ApprovalWithCustomProposalInfo) => {
-    const {proposal_name, proposer} = requested;
+  const proposalsToApprove = await wrappedRequestedApprovals.reduce(async (acc: Promise<ValidationInfo[]>, requested: ApprovalWithCustomProposalInfo) => {
+    const { proposal_name, proposer } = requested;
     const accumulator = await acc;
     const res = await getOneProposal(self, proposer, proposal_name);
     if (res.rows && res.rows.length) {
@@ -82,7 +82,7 @@ async function getProposalsToApprove(wrappedApprovals: ApprovalWithCustomProposa
           && proposal.actions.length === 1
           && Array.isArray(proposal.actions[0].authorization)
           && proposal.actions[0].authorization.length === 1
-          && proposal.actions[0].authorization[0].actor === self.multiSig
+          && proposal.actions[0].authorization[0].actor === 'eosio.prods'
           && proposal.actions[0].name === 'transfer'
           && proposal.actions[0].account === self.eosContract
           && proposal.actions[0].data
@@ -93,24 +93,24 @@ async function getProposalsToApprove(wrappedApprovals: ApprovalWithCustomProposa
           && proposal.actions[0].data.amount.match(/^([0-9]+[.])[0-9]{4}\sBET$/g)
           && proposal.actions[0].data.proposal_name === proposal_name
         ) {
-          accumulator.push({proposal, proposal_name, transactionHash: proposal.actions[0].data.transaction_hash, proposer, proposal_hash});
+          accumulator.push({ proposal, proposal_name, transactionHash: proposal.actions[0].data.transaction_hash, proposer, proposal_hash });
         } else {
-            self.logger.info(`\r\n${proposer}-${proposal_name}: WRONG FORMAT PROPOSAL: ${JSON.stringify(proposal)}\r\n`);
+          self.logger.info(`\r\n${proposer}-${proposal_name}: WRONG FORMAT PROPOSAL: ${JSON.stringify(proposal)}\r\n`);
         }
-      } catch(err) {
+      } catch (err) {
         self.logger.info(JSON.stringify(err))
-      }    
+      }
     }
     return Promise.resolve([...accumulator]);
   }, Promise.resolve([]));
   return proposalsToApprove;
 }
 
-async function wrappedApprove (valInf: ValidationInfoWithEthEvent, self: Oracle, eosValue: string, to: string, proposal_hash: string): Promise<string> {
+async function wrappedApprove(valInf: ValidationInfoWithEthEvent, self: Oracle, eosValue: string, to: string, proposal_hash: string): Promise<string> {
   try {
-    const res = await approve({proposer: valInf.proposer, proposal_name: valInf.proposal_name, actor: self.accountName, api: self.eosApi, proposal_hash});
+    const res = await approve({ proposer: valInf.proposer, proposal_name: valInf.proposal_name, actor: self.accountName, api: self.eosApi, proposal_hash });
     return Promise.resolve(`Approved ${eosValue} to ${to}: ${valInf.proposer} - ${valInf.proposal_name}: ${res}`);
-  } catch(err) {return `approve: ${err.json ? err.json.error.details[0].message : err}`;}
+  } catch (err) { return `approve: ${err.json ? err.json.error.details[0].message : err}`; }
 }
 
 /**
@@ -121,7 +121,7 @@ async function wrappedApprove (valInf: ValidationInfoWithEthEvent, self: Oracle,
  * 2. К ним добавляется имя пропоузера.
  */
 export function addApprovalToCustomProposal(proposed: CustomProposals[], self: Oracle): Promise<ApprovalWithCustomProposalInfo[]> {
-  const approvalsPromises = proposed.map(async(customProposal: CustomProposals) => {
+  const approvalsPromises = proposed.map(async (customProposal: CustomProposals) => {
     const {
       proposal_name,
       proposer,

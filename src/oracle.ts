@@ -132,6 +132,7 @@ export class Oracle {
   }
 
   public async start(cycleBegin: number) {
+    console.log('---Oracle has been launched!---')
     this.doneTransactions = await getInitialTransactions(this);
     this.startApproving(cycleBegin);
     this.contract.events.Swap({})
