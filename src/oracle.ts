@@ -89,7 +89,8 @@ export class Oracle {
     let requested: AccountPermission[] = [];
     while (true) {
       if (!this.attemptsToApprove) {
-        await sleep(15 * SLEEP);
+        await sleep(300 * SLEEP);
+        this.attemptsToApprove = ATTEMPTS_TO_APPROVE
         continue;
       }
 
@@ -107,7 +108,9 @@ export class Oracle {
       }
       try {
         const res = await this.makeBridgeProposesApprovalsAndCancels(requested);
-        const isFinish: boolean = !res.eventsToPropose.length && !res.retCancels.length
+        const isFinish: boolean =
+          !res.eventsToPropose.length
+          && !res.retCancels.length
           && !res.retExecs.length && !res.retProposals.length
           && !res.alreadyProposed.length && !res.retApproves.length
           && this.finishBlock < this.latestBlock;
