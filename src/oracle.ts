@@ -18,6 +18,8 @@ export class Oracle {
   public contract: Contract;
   public eosApi: Api;
   public eosRpc: JsonRpc;
+  public ethereumAPI: string;
+  public ethContractAddress: string;
   public multiSig: string;
   public permission: string;
   public accountName: string;
@@ -46,6 +48,8 @@ export class Oracle {
     blocksBehind: number
   ) {
     this.web3 = new Web3(ethNet);
+    this.ethereumAPI = ethNet;
+    this.ethContractAddress = ethContractAddress
     this.contract = new this.web3.eth.Contract(abiArrayListener.abi, ethContractAddress);
     const { eosApi, eosRpc } = getApi(eosKeyProvider, eosNet, eosChainId);
     this.eosApi = eosApi;
@@ -89,14 +93,14 @@ export class Oracle {
     let requested: AccountPermission[] = [];
     while (true) {
       if (!this.attemptsToApprove) {
-        await sleep(300 * SLEEP);
-        this.attemptsToApprove = ATTEMPTS_TO_APPROVE
+        await sleep(15 * SLEEP);
         continue;
       }
 
       try {
         requested = await this.getRequested();
-      } catch (err) {
+      }
+      catch (err) {
         this.logger.info(JSON.stringify(err));
         await sleep(60 * SLEEP);
         continue;
@@ -130,7 +134,11 @@ export class Oracle {
           this.logger.info(`Attempts remain: ${this.attemptsToApprove}`);
           await sleep(15 * SLEEP);
         }
-      } catch (err) { this.logger.info(`${err}`); continue; }
+      }
+      catch (err) {
+        this.logger.info(`${err}`);
+        continue;
+      }
     }
   }
 
@@ -143,7 +151,15 @@ export class Oracle {
         this.finishBlock = await this.web3.eth.getBlockNumber();
         this.attemptsToApprove = ATTEMPTS_TO_APPROVE;
       })
-      .on('error', (err) => { this.logger.info(err); });
+      .on('error', (err) => {
+        this.logger.info(err);
+      });
+
+    setInterval(() => {
+      this.web3 = new Web3(this.ethereumAPI)
+      this.contract = new this.web3.eth.Contract(abiArrayListener.abi, this.ethContractAddress);
+      this.attemptsToApprove = ATTEMPTS_TO_APPROVE
+    }, 50 * 60 * 1000)
   }
 
 
