@@ -5,7 +5,7 @@
     "permission": "active",
     "Net": "https://api.daovalidator.com",
     "ChainId": "74d023a9293d9b68c3c52e2f738ee681c1671cc3dc0f263cf2c533cd5523ff95",
-    "ethNet": "wss://mainnet.infura.io/ws/v3/7573e2497d66440eab2a06c712ada570",
+    "ethNet": "wss://mainnet.infura.io/ws/v3/<YOUR_PROJECT_ID>",
     "ethContractAddress": "0x8895345ad1c1a2bff799a575f83d89669ba4bce3",
     "Contract": "eosio.bridge",
     "blocksBehind": 0,
