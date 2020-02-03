@@ -8,6 +8,9 @@ in ```conf.json``` file **Configure next fields:**
 
  - ```accountName``` : paste your account name
  - ```KeyProvider``` : paste your account private key
+ - ```ethNet```      : paste your infura id project
+ 
+ > **For getting the infura `project id` you have to register on [infura.io](infura.io) and create a project**
 
 ## Run
 
