@@ -9,5 +9,5 @@
     "ethContractAddress": "0x8895345ad1c1a2bff799a575f83d89669ba4bce3",
     "Contract": "eosio.bridge",
     "blocksBehind": 0,
-    "clockApi": "http://worldclockapi.com/api/json/utc/now"
+    "clockApi": "http://worldtimeapi.org/api/timezone/Etc/UTC"
 }
