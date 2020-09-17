@@ -166,9 +166,7 @@ export class Oracle {
   public async getTime(): Promise<number> {
     const res = await fetch(this.clockApi);
     const time = await res.json();
-    const date = new Date(time.currentDateTime.replace('Z', ':00.000'));
-    this.timeOffset = date.getTimezoneOffset() * 60000;
-    return date.getTime() - this.timeOffset;
+    return new Date(time.utc_datetime).getTime();
   }
 
 
