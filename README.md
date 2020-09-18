@@ -15,10 +15,9 @@ in ```conf.json``` file **Configure next fields:**
 ## Run
 
 using docker:
-
 ```sh
-docker build -t oracle .
-docker run oracle
+docker pull daocasino/oracle
+docker run -d -v PATH_TO_CONFIG_IN_HOST_MACHINE:/app/conf.json daocasino/oracle
 ```
 
 using nodejs:
