@@ -45,7 +45,7 @@
     "tslint": "^5.10.0",
     "typescript": "3.6.3",
     "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.9",
+    "webpack-cli": "^3.3.12",
     "@types/web3": "1.0.20",
     "copy-webpack-plugin": "5.0.4"
   }
